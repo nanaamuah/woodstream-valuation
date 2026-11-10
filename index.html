@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4489 Woodstream Dr Valuation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Layout idea: summary strip first, then an appraisal-style adjustment grid (features as rows, sales as columns), then evidence and notes. */
+  --paper: #f5f7f6;
+  --panel: #ffffff;
+  --ink: #18221f;
+  --muted: #5a6762;
+  --line: #d6dedb;
+  --accent: #1d6b5b;
+  --accent-soft: #e0eee9;
+  --warn: #9a5a00;
+  --warn-soft: #fbefdc;
+  --bad: #b3261e;
+  --good: #2c7a3a;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #101614;
+    --panel: #172120;
+    --ink: #e4ebe8;
+    --muted: #98a7a1;
+    --line: #2b3835;
+    --accent: #5ec4a7;
+    --accent-soft: #1b2e29;
+    --warn: #e7a547;
+    --warn-soft: #2e2416;
+    --bad: #f08a80;
+    --good: #7bcf86;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #101614;
+  --panel: #172120;
+  --ink: #e4ebe8;
+  --muted: #98a7a1;
+  --line: #2b3835;
+  --accent: #5ec4a7;
+  --accent-soft: #1b2e29;
+  --warn: #e7a547;
+  --warn-soft: #2e2416;
+  --bad: #f08a80;
+  --good: #7bcf86;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 56px; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(24px, 3.4vw, 34px); font-weight: 800; }
+h2 { font-size: 19px; font-weight: 700; }
+h3 { font-size: 15px; font-weight: 700; }
+p { margin: 0; max-width: 72ch; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.num, td.n, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+
+header.top { display: grid; gap: 10px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 13px; }
+.note-strip { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 10px 14px; border-radius: 4px; font-size: 13.5px; max-width: 900px; }
+
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+.tile .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.tile .value { font-family: var(--font-display); font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tile.key { border-color: var(--accent); background: var(--accent-soft); }
+.tile .sub { font-size: 13px; color: var(--muted); }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; font-family: var(--font-body); }
+.pill.over { background: var(--warn-soft); color: var(--warn); border: 1px solid var(--warn); }
+.pill.under { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.pill.flag { background: var(--warn-soft); color: var(--warn); }
+.pill.ok { background: var(--accent-soft); color: var(--accent); }
+
+section.block { display: grid; gap: 14px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; align-content: start; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 820px) { .two { grid-template-columns: 1fr; } }
+
+.subject-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px 16px; }
+.fact .k { font-size: 12px; color: var(--muted); }
+.fact .v { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px 18px; }
+.control { display: grid; gap: 4px; }
+.control label { font-size: 13px; font-weight: 600; }
+.control .hint { font-size: 12px; color: var(--muted); }
+.control input[type=number], .control select {
+  font: inherit; font-family: var(--font-mono); padding: 7px 9px; border-radius: 6px;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink); width: 100%;
+}
+.btn { font: inherit; font-weight: 600; font-size: 13px; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+.btn:hover { background: var(--accent-soft); }
+.btn.solid { background: var(--accent); color: var(--panel); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.grid-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+table.grid { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 1060px; font-size: 13px; }
+table.grid th, table.grid td { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+table.grid th:first-child, table.grid td:first-child { text-align: left; position: sticky; left: 0; background: var(--panel); z-index: 1; font-family: var(--font-body); font-weight: 600; color: var(--muted); border-right: 1px solid var(--line); }
+table.grid thead th { vertical-align: bottom; background: var(--panel); }
+table.grid thead th .addr { font-family: var(--font-body); font-weight: 700; color: var(--ink); white-space: normal; display: block; min-width: 120px; text-align: right; }
+table.grid col.subject-col { background: var(--accent-soft); }
+table.grid td.subj, table.grid th.subj { background: var(--accent-soft); }
+table.grid tr.adj td { color: var(--muted); font-size: 12px; }
+table.grid tr.adj td.pos { color: var(--good); }
+table.grid tr.adj td.neg { color: var(--bad); }
+table.grid tr.total td { font-weight: 600; color: var(--ink); }
+table.grid tr.result td { font-weight: 700; font-size: 14px; color: var(--ink); border-bottom: 2px solid var(--accent); }
+table.grid td.off, table.grid th.off { opacity: 0.42; }
+table.grid tr.section td { background: var(--paper); color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; text-align: left; }
+table.grid tr.section td:first-child { background: var(--paper); }
+.toggle { display: inline-flex; gap: 6px; align-items: center; font-family: var(--font-body); font-size: 12px; cursor: pointer; justify-content: flex-end; }
+.toggle input { accent-color: var(--accent); width: 15px; height: 15px; }
+.unk { color: var(--warn); }
+
+table.plain { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+table.plain th, table.plain td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+table.plain th { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+table.plain td.n, table.plain th.n { text-align: right; }
+table.plain tr.me td { background: var(--accent-soft); font-weight: 600; }
+.plain-scroll { overflow-x: auto; }
+
+#chart { width: 100%; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+.report { font-size: 14.5px; display: grid; gap: 10px; }
+.report p { max-width: 80ch; }
+ol.tight, ul.tight { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 80ch; }
+details { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; }
+details summary { cursor: pointer; font-weight: 600; }
+details[open] summary { margin-bottom: 10px; }
+.copy-status { font-size: 12.5px; color: var(--muted); }
+footer { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .tile .value { transition: color .2s; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Sales comparison approach · Practice valuation</div>
+  <h1>4489 Woodstream Dr, Columbus, OH 43230</h1>
+  <div class="meta">
+    <span>Effective date: 10 Nov 2026</span>
+    <span>Property type: single-family, two-story</span>
+    <span>Market: Westerville City Schools side of 43230</span>
+    <span>Analyst: Immanuel Nana Amuah</span>
+  </div>
+  <p class="note-strip">This is a practice exercise built from public listing data on Zillow, Homes.com and broker sites. It is not an appraisal. Some features of the sales could not be verified from listing pages; those cells are marked "n/v" and get no adjustment, and they are listed under Data gaps.</p>
+</header>
+
+<section class="summary" aria-label="Valuation summary">
+  <div class="tile key">
+    <span class="label">Indicated value</span>
+    <span class="value" id="t-value">–</span>
+    <span class="sub" id="t-value-sub">–</span>
+  </div>
+  <div class="tile">
+    <span class="label">Adjusted range</span>
+    <span class="value" id="t-range">–</span>
+    <span class="sub" id="t-range-sub">–</span>
+  </div>
+  <div class="tile">
+    <span class="label">List price</span>
+    <span class="value">$375,000</span>
+    <span class="sub" id="t-gap">–</span>
+  </div>
+  <div class="tile">
+    <span class="label">Price per sq ft check</span>
+    <span class="value" id="t-ppsf">–</span>
+    <span class="sub" id="t-ppsf-sub">–</span>
+  </div>
+</section>
+
+<section class="block two">
+  <div class="panel" style="display:grid; gap:12px;">
+    <h2>Subject property</h2>
+    <div class="subject-facts">
+      <div class="fact"><div class="k">List price</div><div class="v">$375,000</div></div>
+      <div class="fact"><div class="k">Price history</div><div class="v">$385,900 on 25 Sep, cut 9 Oct</div></div>
+      <div class="fact"><div class="k">Living area</div><div class="v">1,505 sq ft</div></div>
+      <div class="fact"><div class="k">Bedrooms / baths</div><div class="v">3 / 1 full, 1 half</div></div>
+      <div class="fact"><div class="k">Year built</div><div class="v">1990</div></div>
+      <div class="fact"><div class="k">Lot</div><div class="v">0.25 ac (10,890 sq ft)</div></div>
+      <div class="fact"><div class="k">Basement</div><div class="v">Full, finish n/v</div></div>
+      <div class="fact"><div class="k">Garage</div><div class="v">2-car attached</div></div>
+      <div class="fact"><div class="k">Taxes / HOA</div><div class="v">$4,359 / none</div></div>
+      <div class="fact"><div class="k">MLS</div><div class="v">#226035994</div></div>
+    </div>
+    <p class="small muted">Source: <a href="https://www.zillow.com/homedetails/4489-Woodstream-Dr-Columbus-OH-43230/34116366_zpid/">Zillow listing</a>, read 10 Nov 2026. Zillow showed no Zestimate for this home.</p>
+  </div>
+  <div class="panel" style="display:grid; gap:12px;">
+    <h2>Adjustment rates</h2>
+    <p class="small muted">Each rate is the market value of one unit of difference. Change any rate and the grid, chart and report update.</p>
+    <div class="controls">
+      <div class="control">
+        <label for="r-gla">Living area ($ per sq ft)</label>
+        <input id="r-gla" type="number" step="5" value="70">
+        <span class="hint" id="h-gla">–</span>
+      </div>
+      <div class="control">
+        <label for="r-time">Market change (% per month)</label>
+        <input id="r-time" type="number" step="0.1" value="0">
+        <span class="hint">0 assumes a flat 2026 market. Check with paired resales.</span>
+      </div>
+      <div class="control">
+        <label for="r-bed">Bedroom ($ each)</label>
+        <input id="r-bed" type="number" step="500" value="5000">
+        <span class="hint">Kept small; size already carries most of it.</span>
+      </div>
+      <div class="control">
+        <label for="r-full">Full bath ($ each)</label>
+        <input id="r-full" type="number" step="500" value="8000">
+      </div>
+      <div class="control">
+        <label for="r-half">Half bath ($ each)</label>
+        <input id="r-half" type="number" step="500" value="4000">
+      </div>
+      <div class="control">
+        <label for="r-age">Age ($ per year)</label>
+        <input id="r-age" type="number" step="50" value="750">
+      </div>
+      <div class="control">
+        <label for="r-lot">Lot ($ per sq ft)</label>
+        <input id="r-lot" type="number" step="0.25" value="1">
+        <span class="hint">Applied only where the comp's lot size is known.</span>
+      </div>
+      <div class="control">
+        <label for="r-style">Two-story vs ranch ($)</label>
+        <input id="r-style" type="number" step="1000" value="0">
+        <span class="hint">Added when a ranch is compared with the two-story subject.</span>
+      </div>
+      <div class="control">
+        <label for="r-weight">Reconciliation weights</label>
+        <select id="r-weight">
+          <option value="gross" selected>Fewer adjustments, more weight</option>
+          <option value="equal">Equal weights</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn" id="reset" type="button">Reset to my rates</button></div>
+  </div>
+</section>
+
+<section class="block">
+  <div style="display:grid; gap:6px;">
+    <h2>Adjustment grid</h2>
+    <p class="small muted">Adjustments move each sale toward the subject: if the comp has something the subject lacks, its price goes down, and the reverse. Untick a sale to drop it from the result. Net above 15% or gross above 25% of the sale price is flagged, the old Fannie Mae screening lines.</p>
+  </div>
+  <div class="grid-scroll"><table class="grid" id="grid"></table></div>
+</section>
+
+<section class="block two">
+  <div class="panel" style="display:grid; gap:10px;">
+    <h2>Sale price against adjusted price</h2>
+    <svg id="chart" viewBox="0 0 600 300" role="img" aria-label="Dot plot of each comparable's sale price and adjusted price, with the indicated value and list price marked"></svg>
+    <div class="legend">
+      <span><i class="sw" style="border:2px solid var(--muted)"></i>Sale price</span>
+      <span><i class="sw" style="background:var(--accent)"></i>Adjusted to subject</span>
+      <span><i class="sw" style="background:var(--accent);border-radius:2px;width:3px;height:14px"></i>Indicated value</span>
+      <span><i class="sw" style="background:var(--warn);border-radius:2px;width:3px;height:14px"></i>List price</span>
+    </div>
+  </div>
+  <div class="panel" style="display:grid; gap:10px;">
+    <h2>Competing listings, 10 Nov 2026</h2>
+    <p class="small muted">Active houses in the Woodstream area on Zillow. Asking prices are not evidence of value, but they show what a buyer can choose instead.</p>
+    <div class="plain-scroll">
+      <table class="plain" id="actives"></table>
+    </div>
+    <p class="small muted">Source: <a href="https://www.zillow.com/woodstream-columbus-oh/">Zillow, Woodstream Columbus listings</a>.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="btn-row" style="justify-content:space-between;">
+    <h2>Value conclusion</h2>
+    <div class="btn-row"><button class="btn solid" id="copy" type="button">Copy report text</button><span class="copy-status" id="copy-status" aria-live="polite"></span></div>
+  </div>
+  <div class="panel report" id="report"></div>
+</section>
+
+<section class="block two">
+  <div class="panel" style="display:grid; gap:10px;">
+    <h2>Data gaps</h2>
+    <ul class="tight" id="gaps"></ul>
+  </div>
+  <div class="panel" style="display:grid; gap:10px;">
+    <h2>Questions for a local broker</h2>
+    <ol class="tight">
+      <li>Is the subject's basement finished? A finished lower level would move it toward the top of the range.</li>
+      <li>Why did 4131 Spring Flower Ct sell for $324,000 one month before 4111 sold for $379,900 on the same court? Condition, a cash sale or a concession would each change how far I trust it.</li>
+      <li>Did 3848 Deer Knoll Dr sell 4% over list because of multiple offers or because it was underpriced?</li>
+      <li>How many showings has the subject had since the 9 October price cut, and at what price do buyers say it would move?</li>
+      <li>Were seller concessions paid on any of these sales? Listing pages do not show them.</li>
+    </ol>
+  </div>
+</section>
+
+<details>
+  <summary>How the sales comparison approach works here</summary>
+  <div style="display:grid; gap:10px;">
+    <p>The approach values a home by what buyers recently paid for similar homes nearby. Each sale is adjusted for the ways it differs from the subject, so that every adjusted price answers the same question: what would this sale have fetched if it were the subject?</p>
+    <p>Adjustments are always made to the comparable, never to the subject. The rates above are my assumptions for a 1980s–1990s suburban market in Columbus at about $210–$250 per square foot. The living-area rate is set well below the average price per square foot, because the land and the basic structure are already paid for; extra square feet add less than the average.</p>
+    <p>The grid shows what the five default sales imply for living area on their own. With so few sales and so many other differences, that raw slope is unstable, so I report it as a check and keep my rate.</p>
+    <p>Reconciliation gives more weight to sales that needed fewer adjustments, because each adjustment adds uncertainty. The final figure is rounded to the nearest $1,000.</p>
+  </div>
+</details>
+
+<footer>
+  <div>Sources, read 10 Nov 2026: <a href="https://www.zillow.com/homedetails/4489-Woodstream-Dr-Columbus-OH-43230/34116366_zpid/">Zillow (subject)</a> · <a href="https://www.zillow.com/homedetails/4338-Big-Sky-Ct-Columbus-OH-43230/34116460_zpid">Zillow (4338 Big Sky Ct)</a> · <a href="https://www.zillow.com/homedetails/4483-Woodstream-Dr-Columbus-OH-43230/34116367_zpid/">Zillow (4483 Woodstream Dr)</a> · <a href="https://www.zillow.com/homedetails/4497-Woodstream-Dr-Columbus-OH-43230/34116365_zpid/">Zillow (4497 Woodstream Dr)</a> · <a href="https://www.homes.com/columbus-oh/43230/sold/p7">Homes.com 43230 sold list</a> · <a href="https://www.homes.com/columbus-oh/43230/sold">Homes.com 43230 sold list (page 1)</a> · <a href="https://www.realtyexecutives.com/propertydetails/3848-deer-knoll-drive-columbus-oh-43230-us-226014365-lid281257230">Realty Executives (3848 Deer Knoll Dr)</a> · <a href="https://www.homefront.com/homes/oh/columbus/property/4327-camden-passage-drive-2719f5ed-bd29-3150-80b6-d91a9c3e6c8c">HomeFront (4327 Camden Passage Dr)</a></div>
+  <div>Practice valuation by Immanuel Nana Amuah. Not an appraisal and not prepared by a licensed appraiser.</div>
+</footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var EFFECTIVE = new Date("2026-11-10T00:00:00Z");
+  var LIST_PRICE = 375000;
+  var SUBJECT = { gla: 1505, beds: 3, full: 1, half: 1, year: 1990, lot: 10890, style: "Two-story", bsmt: "Full", garage: "2 att." };
+  var DEFAULTS = { gla: 70, time: 0, bed: 5000, full: 8000, half: 4000, age: 750, lot: 1, style: 0, weight: "gross" };
+
+  // Sales. null = not verified from the listing pages read.
+  var COMPS = [
+    { id: "C1", addr: "4338 Big Sky Ct", price: 372500, date: "2026-02-25", gla: 1498, beds: 3, full: 2, half: 0, year: 1991, lot: 13504, style: "Ranch", bsmt: "Full", garage: "2 att.", dom: 81, list: 375000, src: "Zillow", on: true },
+    { id: "C2", addr: "4540 Hidden Ridge Ct", price: 355000, date: "2026-03-12", gla: 1708, beds: 3, full: 1, half: 1, year: 1990, lot: null, style: null, bsmt: null, garage: null, dom: 1, list: null, src: "Homes.com", on: true },
+    { id: "C3", addr: "4327 Camden Passage Dr", price: 359000, date: "2026-04-13", gla: 1344, beds: 3, full: 2, half: 1, year: 1994, lot: 6970, style: null, bsmt: null, garage: null, dom: 72, list: 385000, src: "Homes.com, HomeFront", on: true },
+    { id: "C4", addr: "3848 Deer Knoll Dr", price: 355000, date: "2026-05-18", gla: 1633, beds: 3, full: 1, half: 1, year: 1990, lot: 8276, style: null, bsmt: null, garage: null, dom: 3, list: 339900, src: "Homes.com, Realty Exec.", on: true },
+    { id: "C5", addr: "4111 Spring Flower Ct", price: 379900, date: "2026-10-22", gla: 1752, beds: 4, full: 2, half: 1, year: 1979, lot: null, style: null, bsmt: null, garage: null, dom: 18, list: 379900, src: "Homes.com, Zillow", on: true },
+    { id: "C6", addr: "4131 Spring Flower Ct", price: 324000, date: "2026-09-23", gla: 1866, beds: 4, full: 2, half: 1, year: 1979, lot: null, style: null, bsmt: null, garage: null, dom: 2, list: null, src: "Homes.com", on: false,
+      why: "Off by default: sold $55,900 below 4111 on the same court a month apart. That gap suggests a condition difference I cannot see in listing data." },
+    { id: "C7", addr: "4483 Woodstream Dr", price: 445100, date: "2025-03-11", gla: 2208, beds: 4, full: 2, half: 1, year: 1990, lot: 7405, style: "Two-story", bsmt: "Yes", garage: "2 att.", dom: 4, list: 419900, src: "Zillow", on: false,
+      why: "Off by default: same street, but sold 20 months ago and is 700 sq ft larger." },
+    { id: "C8", addr: "4497 Woodstream Dr", price: 385000, date: "2024-07-01", gla: 1425, beds: 3, full: 2, half: 0, year: 1990, lot: 15246, style: "Ranch", bsmt: "Full", garage: "2 att.", dom: 32, list: 385000, src: "Zillow", on: false,
+      why: "Off by default: same street, but sold 28 months ago, before most of the 2025–2026 data." }
+  ];
+
+  var ACTIVES = [
+    { addr: "4489 Woodstream Dr (subject)", price: 375000, beds: 3, baths: 2, gla: 1505, me: true },
+    { addr: "4115 Berrybush Dr (by owner)", price: 345000, beds: 3, baths: 2, gla: 1384 },
+    { addr: "4306 Portobello Dr", price: 335000, beds: 4, baths: 3, gla: 1479 },
+    { addr: "3841 Orange Blossom Ln", price: 344900, beds: 4, baths: 3, gla: 1560 },
+    { addr: "4155 Berrybush Dr", price: 339900, beds: 3, baths: 3, gla: 1547 },
+    { addr: "5173 Raspberrybush Ct", price: 360000, beds: 3, baths: 3, gla: 1668 },
+    { addr: "3969 Blueberry Hollow Rd", price: 359900, beds: 4, baths: 3, gla: 1708 }
+  ];
+
+  function $(id) { return document.getElementById(id); }
+  function money(v) { var s = Math.round(Math.abs(v)).toLocaleString("en-US"); return (v < 0 ? "−$" : "$") + s; }
+  function signed(v) { if (v === 0) return "0"; return (v > 0 ? "+" : "−") + "$" + Math.round(Math.abs(v)).toLocaleString("en-US"); }
+  function pct(v, d) { var t = (Math.abs(v) * 100).toFixed(d === undefined ? 1 : d) + "%"; return v < 0 ? "−" + t : t; }
+  function r100(v) { return Math.round(v / 100) * 100; }
+  function k(v) { return "$" + Math.round(v / 1000) + "k"; }
+  function fmtDate(s) { var d = new Date(s + "T00:00:00Z"); return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }); }
+
+  function readRates() {
+    function n(id, dflt) { var v = parseFloat($(id).value); return isFinite(v) ? v : dflt; }
+    return { gla: n("r-gla", 70), time: n("r-time", 0), bed: n("r-bed", 5000), full: n("r-full", 8000), half: n("r-half", 4000), age: n("r-age", 750), lot: n("r-lot", 1), style: n("r-style", 0), weight: $("r-weight").value };
+  }
+
+  function adjust(c, R) {
+    var months = (EFFECTIVE - new Date(c.date + "T00:00:00Z")) / 86400000 / 30.4375;
+    var a = {};
+    a.time = r100(c.price * (R.time / 100) * months);
+    a.gla = r100((SUBJECT.gla - c.gla) * R.gla);
+    a.bed = r100((SUBJECT.beds - c.beds) * R.bed);
+    a.full = r100((SUBJECT.full - c.full) * R.full);
+    a.half = r100((SUBJECT.half - c.half) * R.half);
+    a.age = r100((SUBJECT.year - c.year) * R.age);
+    a.lot = c.lot === null ? 0 : r100((SUBJECT.lot - c.lot) * R.lot);
+    a.style = (c.style === "Ranch") ? r100(R.style) : 0;
+    var keys = ["time", "gla", "bed", "full", "half", "age", "lot", "style"];
+    var net = 0, gross = 0;
+    keys.forEach(function (key) { net += a[key]; gross += Math.abs(a[key]); });
+    return { months: months, a: a, net: net, gross: gross, adjusted: c.price + net, netPct: net / c.price, grossPct: gross / c.price };
+  }
+
+  function compute(R) {
+    var rows = COMPS.map(function (c) { return { c: c, r: adjust(c, R) }; });
+    var used = rows.filter(function (x) { return x.c.on; });
+    var wsum = 0;
+    used.forEach(function (x) { x.w = R.weight === "equal" ? 1 : 1 / (x.r.grossPct + 0.02); wsum += x.w; });
+    used.forEach(function (x) { x.w = x.w / wsum; });
+    rows.forEach(function (x) { if (!x.c.on) x.w = 0; });
+    var value = 0;
+    used.forEach(function (x) { value += x.w * x.r.adjusted; });
+    var adj = used.map(function (x) { return x.r.adjusted; });
+    var ppsf = used.map(function (x) { return x.c.price / x.c.gla; }).sort(function (a, b) { return a - b; });
+    var med = ppsf.length ? (ppsf.length % 2 ? ppsf[(ppsf.length - 1) / 2] : (ppsf[ppsf.length / 2 - 1] + ppsf[ppsf.length / 2]) / 2) : NaN;
+    // Raw least-squares slope of sale price on living area, for the selected sales.
+    var slope = NaN;
+    if (used.length >= 3) {
+      var mx = 0, my = 0;
+      used.forEach(function (x) { mx += x.c.gla; my += x.c.price; });
+      mx /= used.length; my /= used.length;
+      var sxy = 0, sxx = 0;
+      used.forEach(function (x) { sxy += (x.c.gla - mx) * (x.c.price - my); sxx += (x.c.gla - mx) * (x.c.gla - mx); });
+      slope = sxx ? sxy / sxx : NaN;
+    }
+    return {
+      rows: rows, used: used,
+      value: used.length ? Math.round(value / 1000) * 1000 : NaN,
+      lo: adj.length ? Math.min.apply(null, adj) : NaN,
+      hi: adj.length ? Math.max.apply(null, adj) : NaN,
+      medPpsf: med, ppsfValue: Math.round(med * SUBJECT.gla / 1000) * 1000,
+      slope: slope
+    };
+  }
+
+  function cellVal(v, fmt) { return v === null || v === undefined ? '<span class="unk">n/v</span>' : (fmt ? fmt(v) : v); }
+  function adjCell(v, off) { var cls = v > 0 ? "pos" : (v < 0 ? "neg" : ""); return '<td class="n ' + cls + (off ? " off" : "") + '">' + (v === 0 ? "–" : signed(v)) + "</td>"; }
+
+  function renderGrid(res) {
+    var rows = res.rows;
+    var h = "<thead><tr><th>Feature</th><th class='subj'><span class='addr'>Subject<br>4489 Woodstream Dr</span></th>";
+    rows.forEach(function (x, i) {
+      var off = x.c.on ? "" : " off";
+      h += "<th class='" + off + "'><span class='addr'>" + x.c.id + " · " + x.c.addr + "</span>" +
+        "<label class='toggle' for='use-" + i + "'><input type='checkbox' id='use-" + i + "' data-i='" + i + "'" + (x.c.on ? " checked" : "") + ">Use</label></th>";
+    });
+    h += "</tr></thead><tbody>";
+    function row(label, subj, fn, cls) {
+      var s = "<tr" + (cls ? " class='" + cls + "'" : "") + "><td>" + label + "</td><td class='n subj'>" + subj + "</td>";
+      rows.forEach(function (x) { s += "<td class='n" + (x.c.on ? "" : " off") + "'>" + fn(x) + "</td>"; });
+      return s + "</tr>";
+    }
+    function arow(label, key) {
+      var s = "<tr class='adj'><td>" + label + "</td><td class='n subj'></td>";
+      rows.forEach(function (x) { s += adjCell(x.r.a[key], !x.c.on); });
+      return s + "</tr>";
+    }
+    var span = rows.length + 2;
+    h += "<tr class='section'><td colspan='" + span + "'>Sale</td></tr>";
+    h += row("Sale price", "List $375,000", function (x) { return money(x.c.price); });
+    h += row("Price per sq ft", "$" + Math.round(LIST_PRICE / SUBJECT.gla), function (x) { return "$" + Math.round(x.c.price / x.c.gla); });
+    h += row("Sale date", "Effective 10 Nov 2026", function (x) { return fmtDate(x.c.date); });
+    h += row("Sale vs last list", "–", function (x) { return x.c.list ? pct(x.c.price / x.c.list, 1) : '<span class="unk">n/v</span>'; });
+    h += row("Days on market", "46 so far", function (x) { return x.c.dom; });
+    h += arow("Market conditions", "time");
+    h += "<tr class='section'><td colspan='" + span + "'>Physical features</td></tr>";
+    h += row("Living area (sq ft)", "1,505", function (x) { return x.c.gla.toLocaleString("en-US"); });
+    h += arow("Living area adj.", "gla");
+    h += row("Bedrooms", "3", function (x) { return x.c.beds; });
+    h += arow("Bedroom adj.", "bed");
+    h += row("Full / half baths", "1 / 1", function (x) { return x.c.full + " / " + x.c.half; });
+    h += arow("Full bath adj.", "full");
+    h += arow("Half bath adj.", "half");
+    h += row("Year built", "1990", function (x) { return x.c.year; });
+    h += arow("Age adj.", "age");
+    h += row("Lot (sq ft)", "10,890", function (x) { return cellVal(x.c.lot, function (v) { return v.toLocaleString("en-US"); }); });
+    h += arow("Lot adj.", "lot");
+    h += row("Style", "Two-story", function (x) { return cellVal(x.c.style); });
+    h += arow("Style adj.", "style");
+    h += row("Basement", "Full", function (x) { return cellVal(x.c.bsmt); });
+    h += row("Garage", "2 att.", function (x) { return cellVal(x.c.garage); });
+    h += "<tr class='section'><td colspan='" + span + "'>Result</td></tr>";
+    h += row("Net adjustment", "", function (x) { return signed(x.r.net) + " <span class='muted'>(" + pct(x.r.netPct) + ")</span>"; }, "total");
+    h += row("Gross adjustment", "", function (x) {
+      var flag = Math.abs(x.r.netPct) > 0.15 || x.r.grossPct > 0.25;
+      return pct(x.r.grossPct) + (flag ? " <span class='pill flag'>check</span>" : "");
+    }, "total");
+    h += row("Adjusted price", "", function (x) { return money(x.r.adjusted); }, "result");
+    h += row("Weight", "", function (x) { return x.c.on ? pct(x.w, 0) : "–"; }, "total");
+    h += row("Source", "Zillow", function (x) { return "<span class='muted'>" + x.c.src + "</span>"; });
+    h += "</tbody>";
+    $("grid").innerHTML = h;
+    Array.prototype.forEach.call(document.querySelectorAll("#grid input[type=checkbox]"), function (el) {
+      el.addEventListener("change", function () { COMPS[+el.getAttribute("data-i")].on = el.checked; update(); });
+    });
+  }
+
+  function renderChart(res) {
+    var svg = $("chart");
+    var rows = res.rows;
+    var W = 600, padL = 190, padR = 24, top = 30, rowH = 30;
+    var H = top + rows.length * rowH + 34;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    var vals = [];
+    rows.forEach(function (x) { vals.push(x.c.price, x.r.adjusted); });
+    vals.push(LIST_PRICE);
+    if (isFinite(res.value)) vals.push(res.value);
+    var min = Math.floor(Math.min.apply(null, vals) / 25000) * 25000;
+    var max = Math.ceil(Math.max.apply(null, vals) / 25000) * 25000;
+    function X(v) { return padL + (v - min) / (max - min) * (W - padL - padR); }
+    var s = "";
+    for (var t = min; t <= max; t += 25000) {
+      s += "<line x1='" + X(t) + "' x2='" + X(t) + "' y1='" + (top - 8) + "' y2='" + (H - 26) + "' stroke='var(--line)' stroke-width='1'/>";
+      s += "<text x='" + X(t) + "' y='" + (H - 10) + "' font-size='11' text-anchor='middle' fill='var(--muted)' font-family='IBM Plex Mono, monospace'>" + k(t) + "</text>";
+    }
+    var lx = X(LIST_PRICE);
+    s += "<line x1='" + lx + "' x2='" + lx + "' y1='" + (top - 14) + "' y2='" + (H - 26) + "' stroke='var(--warn)' stroke-width='2' stroke-dasharray='5 4'/>";
+    s += "<text x='" + lx + "' y='" + (top - 18) + "' font-size='11' text-anchor='middle' fill='var(--warn)' font-family='IBM Plex Sans, sans-serif'>List " + k(LIST_PRICE) + "</text>";
+    if (isFinite(res.value)) {
+      var vx = X(res.value);
+      var anchor = Math.abs(vx - lx) < 60 ? (vx < lx ? "end" : "start") : "middle";
+      s += "<line x1='" + vx + "' x2='" + vx + "' y1='" + (top - 14) + "' y2='" + (H - 26) + "' stroke='var(--accent)' stroke-width='2.5'/>";
+      s += "<text x='" + (anchor === "end" ? vx - 4 : anchor === "start" ? vx + 4 : vx) + "' y='" + (top - 4) + "' font-size='11' font-weight='600' text-anchor='" + anchor + "' fill='var(--accent)' font-family='IBM Plex Sans, sans-serif'>Value " + k(res.value) + "</text>";
+    }
+    rows.forEach(function (x, i) {
+      var y = top + 14 + i * rowH;
+      var op = x.c.on ? 1 : 0.35;
+      s += "<g opacity='" + op + "'>";
+      s += "<text x='" + (padL - 10) + "' y='" + (y + 4) + "' font-size='12' text-anchor='end' fill='var(--ink)' font-family='IBM Plex Sans, sans-serif'>" + x.c.id + " " + x.c.addr + "</text>";
+      s += "<line x1='" + X(x.c.price) + "' x2='" + X(x.r.adjusted) + "' y1='" + y + "' y2='" + y + "' stroke='var(--muted)' stroke-width='1.5'/>";
+      s += "<circle cx='" + X(x.c.price) + "' cy='" + y + "' r='5' fill='var(--panel)' stroke='var(--muted)' stroke-width='2'/>";
+      s += "<circle cx='" + X(x.r.adjusted) + "' cy='" + y + "' r='5.5' fill='var(--accent)'/>";
+      s += "</g>";
+    });
+    svg.innerHTML = s;
+  }
+
+  function renderActives() {
+    var h = "<thead><tr><th>Address</th><th class='n'>Asking</th><th class='n'>Beds/baths</th><th class='n'>Sq ft</th><th class='n'>$/sq ft</th></tr></thead><tbody>";
+    ACTIVES.slice().sort(function (a, b) { return b.price / b.gla - a.price / a.gla; }).forEach(function (a) {
+      h += "<tr" + (a.me ? " class='me'" : "") + "><td>" + a.addr + "</td><td class='n num'>" + money(a.price) + "</td><td class='n num'>" + a.beds + "/" + a.baths + "</td><td class='n num'>" + a.gla.toLocaleString("en-US") + "</td><td class='n num'>$" + Math.round(a.price / a.gla) + "</td></tr>";
+    });
+    $("actives").innerHTML = h + "</tbody>";
+  }
+
+  function activesNote() {
+    var others = ACTIVES.filter(function (a) { return !a.me; }).map(function (a) { return a.price / a.gla; }).sort(function (a, b) { return a - b; });
+    var below = others.filter(function (v) { return v < LIST_PRICE / SUBJECT.gla - 5; }).length;
+    return "competing Woodstream-area listings asking $" + Math.round(others[0]) + "–$" + Math.round(others[others.length - 1]) + " per sq ft (" + below + " of " + others.length + " below the subject's $" + Math.round(LIST_PRICE / SUBJECT.gla) + ")";
+  }
+
+  function reportText(res, R) {
+    var n = res.used.length;
+    if (!n) return ["Select at least one sale to reach a value."];
+    var gap = (LIST_PRICE - res.value) / res.value;
+    var best = res.used.slice().sort(function (a, b) { return b.w - a.w; })[0];
+    var flagged = res.used.filter(function (x) { return Math.abs(x.r.netPct) > 0.15 || x.r.grossPct > 0.25; });
+    var p = [];
+    p.push("Based on " + n + " closed sale" + (n > 1 ? "s" : "") + " in the Westerville City Schools part of 43230, the sales comparison approach indicates a market value of " + money(res.value) + " for 4489 Woodstream Dr as of 10 November 2026. The adjusted sales range from " + money(res.lo) + " to " + money(res.hi) + ".");
+    p.push("The most weight (" + pct(best.w, 0) + ") goes to " + best.c.addr + ", which needed a gross adjustment of only " + pct(best.r.grossPct) + ". " +
+      (flagged.length ? flagged.length + " sale" + (flagged.length > 1 ? "s exceed" : " exceeds") + " the 15% net or 25% gross screening line, so " + (flagged.length > 1 ? "they carry" : "it carries") + " less weight." : "No selected sale exceeds the 15% net or 25% gross screening lines."));
+    var diff = res.ppsfValue - res.value;
+    p.push("A simpler check, the median price per square foot of the selected sales ($" + Math.round(res.medPpsf) + ") times the subject's 1,505 sq ft, gives " + money(res.ppsfValue) + ". " +
+      (Math.abs(diff) <= 10000 ? "That is close to the grid result." :
+        "That is " + money(Math.abs(diff)) + (diff < 0 ? " lower" : " higher") + " than the grid result, because it prices every square foot at the average, while in this set the smaller homes sold for more per square foot. I rely on the grid."));
+    p.push("At $375,000 the list price is " + pct(Math.abs(gap)) + (gap >= 0 ? " above" : " below") + " the indicated value. " +
+      (gap > 0.03 ? "Together with 46 days on market, a price cut already taken and " + activesNote() + ", the evidence suggests the price is ahead of the market unless the basement is finished or the interior is updated." :
+        gap < -0.03 ? "The evidence suggests room above the current list price." :
+          "The list price is supported by the closed sales."));
+    p.push("Rates used: living area $" + R.gla + "/sq ft, bedroom $" + R.bed.toLocaleString("en-US") + ", full bath $" + R.full.toLocaleString("en-US") + ", half bath $" + R.half.toLocaleString("en-US") + ", age $" + R.age + "/year, lot $" + R.lot + "/sq ft, market change " + R.time + "% per month.");
+    return p;
+  }
+
+  function renderGaps() {
+    var g = [];
+    COMPS.forEach(function (c) {
+      if (c.why) return;
+      var miss = [];
+      if (c.lot === null) miss.push("lot");
+      if (c.style === null) miss.push("style");
+      if (c.bsmt === null) miss.push("basement");
+      if (c.garage === null) miss.push("garage");
+      if (c.list === null) miss.push("list price");
+      if (miss.length) g.push("<li><strong>" + c.addr + "</strong>: " + miss.join(", ") + " not verified; no adjustment made.</li>");
+    });
+    COMPS.forEach(function (c) { if (c.why) g.push("<li><strong>" + c.addr + "</strong>: " + c.why.replace("Off by default: ", "excluded by default; ") + "</li>"); });
+    g.push("<li><strong>Subject</strong>: Zillow lists the tax assessed value as $278,900 in one place and $97,620 in the tax history. Neither enters the valuation.</li>");
+    g.push("<li><strong>Bath counts</strong>: Homes.com shows 3848 Deer Knoll Dr as 1.5 baths and one Zillow page as 2. I used the listing broker's 1 full and 1 half.</li>");
+    g.push("<li><strong>Concessions</strong>: none of the sources show seller concessions, so sale prices are taken as reported.</li>");
+    $("gaps").innerHTML = g.join("");
+  }
+
+  function update() {
+    var R = readRates();
+    var res = compute(R);
+    renderGrid(res);
+    renderChart(res);
+    $("t-value").textContent = isFinite(res.value) ? money(res.value) : "–";
+    $("t-value-sub").textContent = res.used.length + " sales, weighted";
+    $("t-range").textContent = isFinite(res.lo) ? k(res.lo) + "–" + k(res.hi) : "–";
+    $("t-range-sub").textContent = "Lowest to highest adjusted sale";
+    if (isFinite(res.value)) {
+      var gap = (LIST_PRICE - res.value) / res.value;
+      $("t-gap").innerHTML = "<span class='pill " + (gap >= 0 ? "over" : "under") + "'>" + pct(Math.abs(gap)) + (gap >= 0 ? " above value" : " below value") + "</span>";
+    } else { $("t-gap").textContent = "–"; }
+    $("t-ppsf").textContent = isFinite(res.ppsfValue) ? money(res.ppsfValue) : "–";
+    $("t-ppsf-sub").textContent = isFinite(res.medPpsf) ? "Median $" + Math.round(res.medPpsf) + "/sq ft × 1,505 sq ft" : "–";
+    $("h-gla").textContent = isFinite(res.slope) ? "Raw slope from selected sales: $" + Math.round(res.slope) + "/sq ft (unstable with " + res.used.length + " sales)" : "Select three or more sales to see the raw slope.";
+    $("report").innerHTML = reportText(res, R).map(function (t) { return "<p>" + t + "</p>"; }).join("");
+  }
+
+  ["r-gla", "r-time", "r-bed", "r-full", "r-half", "r-age", "r-lot", "r-style", "r-weight"].forEach(function (id) {
+    $(id).addEventListener("input", update);
+    $(id).addEventListener("change", update);
+  });
+  $("reset").addEventListener("click", function () {
+    $("r-gla").value = DEFAULTS.gla; $("r-time").value = DEFAULTS.time; $("r-bed").value = DEFAULTS.bed;
+    $("r-full").value = DEFAULTS.full; $("r-half").value = DEFAULTS.half; $("r-age").value = DEFAULTS.age;
+    $("r-lot").value = DEFAULTS.lot; $("r-style").value = DEFAULTS.style; $("r-weight").value = DEFAULTS.weight;
+    COMPS.forEach(function (c, i) { c.on = i < 5; });
+    update();
+  });
+  $("copy").addEventListener("click", function () {
+    var text = Array.prototype.map.call(document.querySelectorAll("#report p"), function (p) { return p.textContent; }).join("\n\n");
+    var status = $("copy-status");
+    try {
+      navigator.clipboard.writeText(text).then(function () { status.textContent = "Copied."; }, function () { status.textContent = "Copy was blocked here. Select the text and copy it by hand."; });
+    } catch (e) { status.textContent = "Copy was blocked here. Select the text and copy it by hand."; }
+  });
+
+  renderActives();
+  renderGaps();
+  update();
+
+  if (typeof module !== "undefined") { module.exports = { compute: compute, COMPS: COMPS, DEFAULTS: DEFAULTS }; }
+})();
+</script>
+</body>
+</html>
